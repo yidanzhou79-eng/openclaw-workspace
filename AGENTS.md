@@ -210,3 +210,8 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
+1.每次修改配置前必须调用config-backup技能
+2.每次重启网关前必须调用config-validator技能
+3.GitHub同步规则**强制遵守：同步时必须使用 `github-sync` 技能，不能直接手动git push
+4.如果要进行联网搜索，优先使用内置游览器进行。
+5.不要输出重复的内容，保持上下文简短。

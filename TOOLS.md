@@ -1,6 +1,14 @@
 # TOOLS.md - Local Notes
 
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
+# TOOLS.md - 本地工具与技能说明
+
+## 快速索引
+- [Config-Backup（配置自动备份）](#config-backup配置自动备份)
+- [Config-Validator（配置验证+安全重启）](#config-validator配置验证安全重启)
+
+---
+（下面是各个技能的详细说明）
 
 ## What Goes Here
 
@@ -31,6 +39,62 @@ Things like:
 - Default speaker: Kitchen HomePod
 ```
 
+## Config-Backup（配置自动备份）
+### 用途
+在修改OpenClaw配置文件`openclaw.json`之前，自动执行强制备份，保证每次修改都有完整可追溯的备份记录，防止配置丢失或错误。
+
+### 什么时候用
+- 任何时候要修改`openclaw.json`
+- 任何时候要编辑OpenClaw配置
+- 任何时候提到「备份配置」、「保存配置」
+
+### 怎么用
+- 直接调用脚本：`~/bin/openclaw-config-backup backup`
+- 备份完成后会返回备份文件路径
+
+### 注意事项
+- ⚠️ **必须先备份，才允许修改配置！**
+- 备份文件会自动存到：`/Users/zhouyidan/planb/`
+- 备份文件名带时间戳，永不覆盖历史备份
+
+## Config-Validator（配置验证+安全重启）
+### 用途
+在重启OpenClaw网关之前，自动检查`openclaw.json`配置文件的语法是否正确、是否符合OpenClaw的schema要求，验证通过才允许执行重启，验证失败则阻止重启并报告问题。
+
+### 什么时候用
+- 任何时候要重启OpenClaw网关
+- 任何时候要重启gateway
+- 任何时候提到「重启网关」、「验证配置」
+
+### 怎么用
+- 安全重启（推荐）：`~/bin/openclaw-config-validator safe-restart`
+  - 先验证配置，验证通过才重启
+  - 验证失败则阻止重启，报告问题
+- 只验证不重启：`~/bin/openclaw-config-validator validate`
+
+### 注意事项
+- ⚠️ **禁止直接使用 `openclaw gateway restart`！**
+- ⚠️ **必须用 `~/bin/openclaw-config-validator safe-restart` 来重启网关！**
+- 验证失败时，必须先修复配置或回滚到上一个备份
+
+## GitHub-Sync（GitHub同步）
+### 用途
+将当前OpenClaw workspace同步到GitHub仓库，自动执行git add、commit、push操作。严格确保简历文件夹不会被推送到GitHub。
+
+### 什么时候用
+- 任何时候提到「同步GitHub」、「上传到GitHub」、「git push」、「推送代码」
+
+### 怎么用
+- 自动同步（推荐）：`~/bin/openclaw-github-sync sync`
+  - 自动检查.gitignore，确保简历文件夹被忽略
+  - 自动add、commit、push
+- 只查看状态（不同步）：`~/bin/openclaw-github-sync status`
+
+### 注意事项
+- ⚠️ **永远不要将简历文件夹推送到GitHub！**
+- 脚本会自动检查并确保简历文件夹在.gitignore中
+- 如果简历文件夹不在.gitignore中，会自动添加并阻止推送
+- GitHub仓库：`https://github.com/yidanzhou79-eng/openclaw-workspace.git`
 ## Why Separate?
 
 Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
@@ -38,34 +102,3 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
-
-## Resume-JD Matching Agent 配置说明
-
-### 模型选择：
-- **火山引擎 Doubao-Seedream-4.5**（当前配置）
-  - 优点：多模态，理解能力强，擅长中文解析
-  - 缺点：需要单独配置图像生成（如果有需要）
-
-### Agent 能力设计：
-1. **输入处理**：
-   - JD（岗位描述）文本解析
-   - 简历文本解析
-   - 可选的简历附件（PDF/DOC）
-
-2. **匹配度分析**：
-   - 技能点对比
-   - 经验年限匹配
-   - 学历要求匹配
-   - 软技能匹配
-   - 行业背景匹配
-
-3. **改进建议**：
-   - 简历修改建议
-   - 技能补充方向
-   - 经验突出点优化
-   - 格式和结构建议
-
-### 可能需要的外部工具：
-- 文件解析（PDF解析）
-- 数据可视化（匹配度图表）
-- 简历模板库
